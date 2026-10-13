@@ -81,6 +81,67 @@ There are three ways to configure your skills path:
 
 ## Client Setup
 
+### Cline & Roo Code Setup
+
+Cline and Roo Code can launch the server over MCP STDIO from their shared
+`cline_mcp_settings.json` configuration. Clone the repository, install its
+dependencies, and use the repository's `src.server` entry point:
+
+```json
+{
+  "mcpServers": {
+    "skills": {
+      "command": "python",
+      "args": [
+        "-m",
+        "src.server",
+        "--transport",
+        "stdio",
+        "--skill-root",
+        "C:/Users/<username>/.claude/skills"
+      ],
+      "cwd": "C:/path/to/Skills_MCP_Server"
+    }
+  }
+}
+```
+
+On macOS or Linux, replace the Windows paths with absolute paths such as
+`/Users/<username>/.claude/skills` and `/path/to/Skills_MCP_Server`. If you
+prefer `uv`, replace the command and arguments with:
+
+```json
+{
+  "command": "uv",
+  "args": [
+    "run",
+    "--directory",
+    "/path/to/Skills_MCP_Server",
+    "python",
+    "-m",
+    "src.server",
+    "--transport",
+    "stdio",
+    "--skill-root",
+    "/Users/<username>/.claude/skills"
+  ]
+}
+```
+
+The issue description refers to `python -m skills_mcp_server`, but this
+repository currently exposes `src.server` and does not define a
+`skills_mcp_server` module or console script. Keep `src.server` in the
+configuration unless the package entry point is added in a separate change.
+
+After saving `cline_mcp_settings.json`, reload the MCP servers from the Cline
+or Roo Code MCP panel, or restart the editor if the server remains stopped.
+The connection is ready when the server is shown as connected and the tools
+list includes `list_skills`, `search_skills`, and `get_skill` (along with the
+other Skills MCP tools). Use an absolute `cwd` and `--skill-root`; do not put
+credentials or API keys in this configuration.
+
+---
+
 ### 1. Claude Desktop (Local STDIO)
 
 Add to `%APPDATA%\Claude\claude_desktop_config.json` (Windows) or `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS):
